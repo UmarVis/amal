@@ -2,12 +2,16 @@ package com.github.umarvis.amal.serviceImpl;
 
 import com.github.umarvis.amal.dtos.UserDto;
 import com.github.umarvis.amal.entities.User;
+import com.github.umarvis.amal.exception.UserNotFoundException;
 import com.github.umarvis.amal.repository.UserRepository;
 import com.github.umarvis.amal.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,47 @@ public class UserServiceImpl implements UserService {
         log.info("User with ID [{}], name [{}], email [{}], phone [{}] created",
                 user.getId(), user.getName(), user.getEmail(), user.getNumberPhone());
         return toDto(userRepository.saveAndFlush(user));
+    }
+
+    @Override
+    @Transactional
+    public UserDto update(UserDto dto, Integer id) {
+        //todo check number and email
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("Пользователь с ИД " + id + " не найден"));
+        if (dto.getName() != null && !(dto.getName().isBlank())) {
+            user.setName(dto.getName());
+        }
+        if (dto.getEmail() != null && !(dto.getEmail().isBlank())) {
+            user.setEmail(dto.getEmail());
+        }
+        if (dto.getNumberPhone() != null && !(dto.getNumberPhone().isBlank())) {
+            user.setNumberPhone(dto.getNumberPhone());
+        }
+        log.info("Полтьователь с ИД {} обновлен", id);
+        userRepository.save(user);
+        return toDto(user);
+    }
+
+    @Override
+    public UserDto getById(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("Пользователь с ИД " + id + " не найден"));
+        return toDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAll() {
+        return userRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("Пользователь с ИД " + id + " не найден"));
+        log.info("Пользователь с ИД {} удален", id);
+        userRepository.deleteById(id);
     }
 
     private User toEntity(UserDto userDto) {

@@ -1,8 +1,10 @@
 package com.github.umarvis.amal.entities;
 
-import lombok.*;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder
@@ -20,7 +22,7 @@ public class User {
     @Column(name = "email")
 
     private String email;
-    @Column(name = "numberPhone")
+    @Column(name = "numberphone")
 
     private String numberPhone;
 }
