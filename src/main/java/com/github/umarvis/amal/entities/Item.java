@@ -25,7 +25,7 @@ public class Item {
     @Column(name = "inStock")
     private Boolean inStock;
     @ManyToOne
-    @JoinColumn(name = "users", referencedColumnName = "id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
     @OneToOne
     @JoinColumn(name = "request", referencedColumnName = "id")
