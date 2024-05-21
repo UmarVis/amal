@@ -1,0 +1,10 @@
+user
+boolean isVerified; - email
+boolean isBanned; -
+
+Item
+createdAt
+updatedAt
+isBanned
+isVerified; -admin?
+enum Status - STOPPED, active, deleted
