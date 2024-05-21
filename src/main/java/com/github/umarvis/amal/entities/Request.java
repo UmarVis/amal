@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "request")
 public class Request {
     @Id
     @Column(name = "id")
@@ -23,8 +23,8 @@ public class Request {
     @Column(name = "description")
     private String description;
     @ManyToOne
-    @JoinColumn(name = "users", referencedColumnName = "id")
-    private User requestor;
+    @JoinColumn(name = "requester_id")
+    private User requester;
     @CreatedDate
     private LocalDateTime created;
 }

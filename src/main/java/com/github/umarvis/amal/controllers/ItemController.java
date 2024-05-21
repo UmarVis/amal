@@ -12,7 +12,17 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/add")
-    private ItemDto add(@RequestHeader ("X-Sharer-User-Id") Integer userId, @RequestBody ItemDto dto) {
+    private ItemDto add(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestBody ItemDto dto) {
         return itemService.add(userId, dto);
+    }
+
+    @PatchMapping("{itemId}")
+    public ItemDto update(@RequestHeader("X-Sharer-User-Id") Integer userId, @RequestBody ItemDto dto, @PathVariable Integer itemId) {
+        return itemService.update(userId, dto, itemId);
+    }
+
+    @GetMapping("{id}")
+    public ItemDto findById(@PathVariable Integer id) {
+        return itemService.findById(id);
     }
 }
