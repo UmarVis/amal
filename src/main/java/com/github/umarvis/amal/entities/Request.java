@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -14,17 +15,20 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "request")
+@Table(name = "requests")
 public class Request {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+    @Column(name = "name")
+    private String name;
     @Column(name = "description")
     private String description;
     @ManyToOne
     @JoinColumn(name = "requester_id")
     private User requester;
     @CreatedDate
+    @Column(name = "created")
     private LocalDateTime created;
 }

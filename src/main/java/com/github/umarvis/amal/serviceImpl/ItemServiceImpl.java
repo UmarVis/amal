@@ -14,6 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -65,6 +69,22 @@ public class ItemServiceImpl implements ItemService {
         log.info("Получена вещь с ИД [{}]", id);
         return toDto(itemRepository.findById(id).orElseThrow(()
                 -> new ItemNotFoundException("Вещь с ИД " + id + " не найдена")));
+    }
+
+    @Override
+    public List<ItemDto> getAll(Integer userId) {
+        User user = checkUser(userId);
+        return itemRepository.findAllByOwnerOrderById(user).stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemDto> search(String text) {
+        if (text.isBlank()) {
+            log.warn("Ведется поиск по пустой строке");
+            return Collections.emptyList();
+        }
+        log.info("Поиск по ключевому слову [{}]", text);
+        return itemRepository.findAllByText(text).stream().map(this::toDto).collect(Collectors.toList());
     }
 
     private User checkUser(Integer userId) {
